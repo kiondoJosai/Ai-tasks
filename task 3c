@@ -1,0 +1,99 @@
+% ========== FACTS ==========
+% parent(Parent, Child)
+
+% Generation 1: Grandparents
+parent(kiplimo, cherop).      % Kiplimo is father of Cherop
+parent(kiplimo, kipchoge).    % Kiplimo is father of Kipchoge
+parent(jerono, cherop).       % Jerono is mother of Cherop
+parent(jerono, kipchoge).     % Jerono is mother of Kipchoge
+
+% Generation 2: Parents
+parent(cherop, otieno).       % Cherop is parent of Otieno
+parent(cherop, akinyi).       % Cherop is parent of Akinyi
+parent(kipchoge, wanjiku).    % Kipchoge is parent of Wanjiku
+parent(kipchoge, kamau).      % Kipchoge is parent of Kamau
+
+% Generation 3: Grandchildren
+% (Otieno, Akinyi, Wanjiku, Kamau are grandchildren of Kiplimo & Jerono)
+
+% Generation 4: Great-grandchildren
+parent(otieno, nyambura).     % Otieno's daughter
+parent(akinyi, odhiambo).     % Akinyi's son
+
+% Gender
+% Male
+male(kiplimo).
+male(kipchoge).
+male(kamau).
+male(otieno).
+male(odhiambo).
+
+% Female
+female(jerono).
+female(cherop).
+female(akinyi).
+female(wanjiku).
+female(nyambura).
+
+% ========== RELATIONSHIP RULES ==========
+
+% Parents
+father(F, C) :- parent(F, C), male(F).
+mother(M, C) :- parent(M, C), female(M).
+
+% Grandparents
+grandparent(G, C) :- parent(G, P), parent(P, C).
+grandfather(G, C) :- grandparent(G, C), male(G).
+grandmother(G, C) :- grandparent(G, C), female(G).
+
+% Children
+child(C, P) :- parent(P, C).
+
+% Grandchildren
+grandchild(C, G) :- grandparent(G, C).
+
+% Great-grandparent
+great_grandparent(GGP, GGC) :-
+    parent(GGP, P),
+    parent(P, C),
+    parent(C, GGC).
+
+% Siblings
+sibling(A, B) :-
+    parent(P, A),
+    parent(P, B),
+    A \= B.
+
+% Brothers & Sisters
+brother(X, Y) :- sibling(X, Y), male(X).
+sister(X, Y) :- sibling(X, Y), female(X).
+
+% Aunts (sister of parent)
+aunt(A, X) :-
+    parent(P, X),
+    sibling(A, P),
+    female(A).
+
+% Uncles (brother of parent)
+uncle(U, X) :-
+    parent(P, X),
+    sibling(U, P),
+    male(U).
+
+% Cousins (children of siblings)
+cousin(C1, C2) :-
+    parent(P1, C1),
+    parent(P2, C2),
+    sibling(P1, P2),
+    C1 \= C2.
+
+% Nephews and Nieces
+nephew(N, X) :-
+    sibling(X, P),
+    parent(P, N),
+    male(N).
+
+niece(N, X) :-
+    sibling(X, P),
+    parent(P, N),
+    female(N).
