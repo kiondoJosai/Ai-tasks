@@ -1,0 +1,44 @@
+
+import os
+import numpy as np
+import matplotlib.pyplot as plt
+
+
+try:
+    from tensorflow.keras.datasets import mnist
+    print("Using TensorFlow/Keras to load MNIST...")
+except ImportError:
+    print("TensorFlow not found. Installing...")
+    os.system("pip install tensorflow --quiet")
+    from tensorflow.keras.datasets import mnist
+
+
+(X_train, y_train), (X_test, y_test) = mnist.load_data()
+
+
+print("\n========== MNIST Dataset Summary ==========")
+print(f"Training images : {X_train.shape}   → {X_train.shape[0]} images of {X_train.shape[1]}×{X_train.shape[2]} pixels")
+print(f"Training labels : {y_train.shape}")
+print(f"Test images     : {X_test.shape}    → {X_test.shape[0]} images of {X_test.shape[1]}×{X_test.shape[2]} pixels")
+print(f"Test labels     : {y_test.shape}")
+print(f"Pixel range     : {X_train.min()} – {X_train.max()}")
+print(f"Classes         : {np.unique(y_train)}  (digits 0–9)")
+print("============================================\n")
+
+
+fig, axes = plt.subplots(2, 5, figsize=(12, 5))
+fig.suptitle("MNIST – One Sample Per Digit (0–9)", fontsize=14, fontweight='bold')
+
+for digit in range(10):
+    # Find first occurrence of this digit in the training set
+    idx = np.where(y_train == digit)[0][0]
+    row, col = divmod(digit, 5)
+    ax = axes[row][col]
+    ax.imshow(X_train[idx], cmap='gray')
+    ax.set_title(f"Label: {digit}", fontsize=11)
+    ax.axis('off')
+
+plt.tight_layout()
+plt.savefig("mnist_samples.png", dpi=120)
+plt.show()
+print("Sample image saved as 'mnist_samples.png'")
