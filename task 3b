@@ -1,0 +1,28 @@
+% Facts - Kenyan family
+parent(kiplimo, cherop).
+parent(kiplimo, kipchoge).
+parent(jerono, cherop).
+parent(jerono, kipchoge).
+
+parent(cherop, otieno).
+parent(cherop, akinyi).
+parent(kipchoge, wanjiku).
+parent(kipchoge, kamau).
+
+male(kiplimo).
+male(kipchoge).
+male(kamau).
+male(otieno).
+
+female(jerono).
+female(cherop).
+female(akinyi).
+female(wanjiku).
+
+% Rules
+father(X, Y) :- parent(X, Y), male(X).
+mother(X, Y) :- parent(X, Y), female(X).
+grandparent(X, Z) :- parent(X, Y), parent(Y, Z).
+sibling(X, Y) :- parent(P, X), parent(P, Y), X \= Y.
+brother(X, Y) :- sibling(X, Y), male(X).
+sister(X, Y) :- sibling(X, Y), female(X).
