@@ -1,4 +1,3 @@
-
 import os
 import numpy as np
 import matplotlib.pyplot as plt
@@ -30,7 +29,7 @@ fig, axes = plt.subplots(2, 5, figsize=(12, 5))
 fig.suptitle("MNIST – One Sample Per Digit (0–9)", fontsize=14, fontweight='bold')
 
 for digit in range(10):
-    # Find first occurrence of this digit in the training set
+    
     idx = np.where(y_train == digit)[0][0]
     row, col = divmod(digit, 5)
     ax = axes[row][col]
