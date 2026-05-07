@@ -1,0 +1,109 @@
+from collections import deque
+
+class Graph:
+    def __init__(self):
+        
+        self.graph = {
+            'A': ['B', 'C'],
+            'B': ['A', 'D', 'E'],
+            'C': ['A', 'F'],
+            'D': ['B'],
+            'E': ['B', 'F'],
+            'F': ['C', 'E', 'G'],
+            'G': ['F']
+        }
+    
+    def bfs(self, start, goal):
+        """
+        Breadth First Search - returns path from start to goal
+        Uses queue (FIFO) - explores level by level
+        """
+        visited = set()
+        
+        queue = deque([(start, [start])])
+        
+        print(f"\n{'='*50}")
+        print(f"BFS SEARCH from {start} to {goal}")
+        print(f"{'='*50}")
+        
+        while queue:
+            node, path = queue.popleft()
+            
+            print(f"Visiting: {node}, Path so far: {' -> '.join(path)}")
+            
+            if node == goal:
+                print(f"\n✓ Goal {goal} found!")
+                print(f"✓ Final BFS Path: {' -> '.join(path)}")
+                return path
+            
+            if node not in visited:
+                visited.add(node)
+                
+                for neighbor in self.graph.get(node, []):
+                    if neighbor not in visited:
+                        queue.append((neighbor, path + [neighbor]))
+        
+        print(f"\n✗ Goal {goal} not reachable from {start}")
+        return None
+    
+    def dfs(self, start, goal):
+        """
+        Depth First Search - returns path from start to goal
+        Uses stack (LIFO) - explores deep into one branch first
+        """
+        visited = set()
+        
+        stack = [(start, [start])]
+        
+        print(f"\n{'='*50}")
+        print(f"DFS SEARCH from {start} to {goal}")
+        print(f"{'='*50}")
+        
+        while stack:
+            node, path = stack.pop()
+            
+            print(f"Visiting: {node}, Path so far: {' -> '.join(path)}")
+            
+            if node == goal:
+                print(f"\n✓ Goal {goal} found!")
+                print(f"✓ Final DFS Path: {' -> '.join(path)}")
+                return path
+            
+            if node not in visited:
+                visited.add(node)
+                
+                for neighbor in self.graph.get(node, []):
+                    if neighbor not in visited:
+                        stack.append((neighbor, path + [neighbor]))
+        
+        print(f"\n✗ Goal {goal} not reachable from {start}")
+        return None
+
+
+
+if __name__ == "__main__":
+    g = Graph()
+    
+    print("\n" + "="*60)
+    print("GRAPH SEARCH ALGORITHMS - BFS & DFS")
+    print("="*60)
+    print(f"Graph: {g.graph}")
+    
+    start_node = 'A'
+    goal_node = 'G'
+    
+    
+    bfs_path = g.bfs(start_node, goal_node)
+    
+    
+    dfs_path = g.dfs(start_node, goal_node)
+    
+    
+    print(f"\n{'='*60}")
+    print("SUMMARY")
+    print(f"{'='*60}")
+    print(f"Start Node: {start_node}")
+    print(f"Goal Node:  {goal_node}")
+    print(f"BFS Path:   {bfs_path}")
+    print(f"DFS Path:   {dfs_path}")
+    print("="*60)
